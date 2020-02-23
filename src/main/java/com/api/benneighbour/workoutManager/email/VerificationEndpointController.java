@@ -1,6 +1,5 @@
 package com.api.benneighbour.workoutManager.email;
 
-import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyVerifiedException;
 import com.api.benneighbour.workoutManager.exceptions.ServiceDownException;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;

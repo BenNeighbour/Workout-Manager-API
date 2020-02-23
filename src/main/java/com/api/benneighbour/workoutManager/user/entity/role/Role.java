@@ -1,6 +1,5 @@
 package com.api.benneighbour.workoutManager.user.entity.role;
 
-import com.api.benneighbour.workoutManager.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

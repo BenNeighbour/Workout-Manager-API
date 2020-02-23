@@ -9,6 +9,7 @@ import com.api.benneighbour.workoutManager.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
 import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyTakenException;
 
@@ -70,9 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Long uid) {
+    public void deleteUser(Long uid) throws UnauthorizedUserException {
         if (dao.findUserByUid(uid).getRoles().contains("ADMIN")) {
-
+            throw new UnauthorizedUserException("Unauthorized");
         }
         dao.deleteById(uid);
     }

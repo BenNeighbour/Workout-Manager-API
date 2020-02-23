@@ -6,7 +6,6 @@ import com.api.benneighbour.workoutManager.workout.service.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

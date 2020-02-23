@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Date;
 import java.util.List;
 

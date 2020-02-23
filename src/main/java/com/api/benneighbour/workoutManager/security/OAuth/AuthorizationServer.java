@@ -1,7 +1,6 @@
 package com.api.benneighbour.workoutManager.security.OAuth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,8 +9,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-
-import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -37,7 +34,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
                 .scopes("read", "write", "trust")
                 .resourceIds("oauth2-resource")
                 .accessTokenValiditySeconds(500)
-                .refreshTokenValiditySeconds(600)
+                .refreshTokenValiditySeconds(1000)
                 .secret(passwordEncoder.encode("MyStrongPassword"));
     }
 

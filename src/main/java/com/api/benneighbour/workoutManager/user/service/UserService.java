@@ -2,6 +2,7 @@ package com.api.benneighbour.workoutManager.user.service;
 
 import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyTakenException;
 import com.api.benneighbour.workoutManager.user.entity.User;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface UserService {
 
     User getUserByName(String username);
 
-    void deleteUser(Long uid);
+    void deleteUser(Long uid) throws UnauthorizedUserException;
 
 }

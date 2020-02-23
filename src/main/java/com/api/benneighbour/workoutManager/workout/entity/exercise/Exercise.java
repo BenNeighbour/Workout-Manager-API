@@ -1,7 +1,6 @@
 package com.api.benneighbour.workoutManager.workout.entity.exercise;
 
 import com.api.benneighbour.workoutManager.workout.entity.Workout;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
