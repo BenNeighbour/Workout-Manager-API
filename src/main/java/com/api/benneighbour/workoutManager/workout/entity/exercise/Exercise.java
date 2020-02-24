@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.io.Serializable;
 
-// Entity annotation to flag to JPA
+// Entity annotation to flag to java.persistence
 @Entity
 // Table annotation to give the Entity a name when it creates all of the tables inside the Database
 @Table(name = "exercise")
@@ -15,6 +15,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Exercise implements Serializable {
 
+    // Serializable version id for the class
     private static final long serialVersionUID = -4678951580982202818L;
 
     // The id field for each workout
@@ -53,9 +54,6 @@ public class Exercise implements Serializable {
     @JoinColumn(name ="workout_wid", referencedColumnName = "wid")
     private Workout workout;
 
-    // Default constructor mark for this class
-    Exercise(){}
-
     // Constructor with it's values
     public Exercise(Long eid, String name, int reps, int sets, int burntCals, int difficulty, Workout workout) {
         this.eid = eid;
@@ -71,7 +69,7 @@ public class Exercise implements Serializable {
     }
 
     /*
-        Setters and Getters for the Exercise class so that the values for it's instance can be seen by
+        Setters and Getters for the Exercise class so that the values in it's instance can be seen by
         the other classes in the service and security layers.
     */
 

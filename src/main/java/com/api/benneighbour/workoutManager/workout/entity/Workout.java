@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-// Entity annotation to flag to JPA
+// Entity annotation to flag to java.persistence
 @Entity
 // Table annotation to give the Entity a name when it creates all of the tables inside the Database
 @Table(name = "workout")
@@ -21,6 +21,7 @@ import java.util.List;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Workout implements Serializable {
 
+    // Serializable version id for the class
     private static final long serialVersionUID = 5202735610840765545L;
 
     // The id field for each workout
@@ -66,9 +67,6 @@ public class Workout implements Serializable {
     @Column(name = "dateUpdated")
     private Date updated;
 
-    // Default constructor mark for this class
-    Workout(){}
-
     // Constructor with it's values
     public Workout(Long wid, String name, int thumbnail_num, int duration, List<Exercise> exerciseList, Date created, Date updated) {
         this.wid = wid;
@@ -82,7 +80,7 @@ public class Workout implements Serializable {
     }
 
     /*
-        Setters and Getters for the Workout class so that the values for it's instance can be seen by
+        Setters and Getters for the Workout class so that the values in it's instance can be seen by
         the other classes in the service and security layers.
     */
 
