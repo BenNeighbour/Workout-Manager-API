@@ -26,7 +26,10 @@ public class Role implements Serializable {
     @Column(name = "name")
     private String name = "USER";
 
-    // Default constructor with all it's fields
+    // Required default constructor
+    public Role() {}
+
+    // Constructor with all it's fields
     public Role(String name, Long rid) {
         this.name = name;
         this.rid = rid;
@@ -54,5 +57,5 @@ public class Role implements Serializable {
     public void setRid(Long rid) {
         this.rid = rid;
     }
-    
+
 }
