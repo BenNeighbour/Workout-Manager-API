@@ -54,6 +54,9 @@ public class Exercise implements Serializable {
     @JoinColumn(name ="workout_wid", referencedColumnName = "wid")
     private Workout workout;
 
+    // Required default constructor
+    public Exercise() {}
+
     // Constructor with it's values
     public Exercise(Long eid, String name, int reps, int sets, int burntCals, int difficulty, Workout workout) {
         this.eid = eid;

@@ -67,6 +67,9 @@ public class Workout implements Serializable {
     @Column(name = "dateUpdated")
     private Date updated;
 
+    // Required default constructor
+    public Workout() {}
+
     // Constructor with it's values
     public Workout(Long wid, String name, int thumbnail_num, int duration, List<Exercise> exerciseList, Date created, Date updated) {
         this.wid = wid;
