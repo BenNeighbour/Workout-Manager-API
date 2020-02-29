@@ -14,7 +14,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Service
-public class EmailSender {
+public class ResetPasswordEmailSender {
 
     @Autowired
     private SpringTemplateEngine emailTemplateEngine;
@@ -25,7 +25,7 @@ public class EmailSender {
     @Autowired
     private User user;
 
-    public EmailSender(User u) {
+    public ResetPasswordEmailSender(User u) {
         this.user = u;
     }
 
@@ -44,16 +44,14 @@ public class EmailSender {
 
                         // Creating a new instance of a context to actually process the email template in the configured directory
                         Context context = new Context();
-                        context.setVariable("message", " Thank you for signing up to Workout Manager, " + u.getUsername() + ". To verify that this is you, please click on this link to verify your email address.");
+                        context.setVariable("message", "Hi, " + u.getUsername() + " you are receiving this email to verify that you want to reset your password");
 
-                        context.setVariable("url", "http://localhost:8080/api/v1/user/verify/verifyEmailAddress/" + u.getEmail());
-
-                        String html = emailTemplateEngine.process("verificationEmail", context);
+                        String html = emailTemplateEngine.process("resetPasswordEmail", context);
 
                         // Create a new instance for the email
                         messageHelper.setFrom("noreply@workoutmanager.com");
                         messageHelper.setTo(u.getEmail());
-                        messageHelper.setSubject("Workout Manager Verification");
+                        messageHelper.setSubject("Workout Manager Reset Password");
                         messageHelper.setText(html, true);
 
                         // Send the email
@@ -65,7 +63,7 @@ public class EmailSender {
                     }
 
                 } catch (MessagingException e) {
-                    throw new EmailUnreachableException("The email you entered cannot be reached by us. Please try again soon");
+                    throw new EmailUnreachableException("Sorry, the email you entered is not linked to any registered accounts.");
                 }
             }
 
@@ -75,4 +73,5 @@ public class EmailSender {
             }
         };
     }
+
 }

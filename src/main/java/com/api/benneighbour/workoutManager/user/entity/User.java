@@ -61,7 +61,7 @@ public class User implements Serializable {
     private List<Role> roles;
 
     // The collection of workouts that belongs to each user
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Workout.class, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Workout.class)
     private List<Workout> workoutList;
 
     // The enabled boolean for the OAuth 2.0 configuration

@@ -1,6 +1,7 @@
 package com.api.benneighbour.workoutManager.user.service.impl;
 
-import com.api.benneighbour.workoutManager.email.EmailSender;
+import com.api.benneighbour.workoutManager.email.SignupEmailSender;
+import com.api.benneighbour.workoutManager.exceptions.EmailNotFoundException;
 import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
 import com.api.benneighbour.workoutManager.exceptions.ServiceDownException;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private EmailSender sender;
+    private SignupEmailSender sender;
 
     @Override
     public User saveUser(User u) throws EmailAlreadyTakenException, EmailUnreachableException {
@@ -59,10 +60,36 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
-    public User updateUser(User u) {
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
-        return dao.saveAndFlush(u);
+    public User updateUser(User u) throws EmailNotFoundException {
+        if (dao.findUserByEmail(u.getEmail()) == null) {
+            throw new EmailNotFoundException("Sorry, the email you entered is not linked to any registered accounts.");
+        } else {
+
+            // Catch anything that could go wrong with setting the new mime message correctly
+            try {
+                try {
+
+                    // Creating a separate thread for the email sending tasks to run on, to avoid slow response time
+                    Thread emailThread = new Thread(sender.newRunnable(u));
+
+                    // Starting the runnable task on the dedicated email thread
+                    emailThread.start();
+
+                } catch (ServiceDownException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Encode the user's password and save the new one into the database
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+            return dao.saveAndFlush(u);
+        }
+
     }
 
     @Override
