@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(User u) throws EmailNotFoundException {
+    public User resetPassword(User u) throws EmailNotFoundException {
         if (dao.findUserByEmail(u.getEmail()) == null) {
             throw new EmailNotFoundException("Sorry, the email you entered is not linked to any registered accounts.");
         } else {
@@ -89,6 +89,13 @@ public class UserServiceImpl implements UserService {
             u.setPassword(passwordEncoder.encode(u.getPassword()));
             return dao.saveAndFlush(u);
         }
+
+    }
+
+    @Override
+    public User updateUser(User u) {
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        return dao.saveAndFlush(u);
 
     }
 

@@ -12,7 +12,9 @@ public interface UserService {
 
     User saveUser(User user) throws EmailAlreadyTakenException, EmailUnreachableException;
 
-    User updateUser(User user) throws EmailNotFoundException;
+    User updateUser(User user);
+
+    User resetPassword(User user) throws EmailNotFoundException;
 
     List<User> getAllUsers();
 
