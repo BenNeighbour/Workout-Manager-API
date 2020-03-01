@@ -1,5 +1,6 @@
 package com.api.benneighbour.workoutManager.user.service;
 
+import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
 import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyTakenException;
 import com.api.benneighbour.workoutManager.exceptions.EmailNotFoundException;
 import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
@@ -14,7 +15,11 @@ public interface UserService {
 
     User updateUser(User user);
 
-    User resetPassword(User user) throws EmailNotFoundException;
+    String resetPassword(String email) throws EmailNotFoundException;
+
+    void createVerificationToken(User user, String token);
+
+    ChangePasswordToken getVerificationToken(String verificationToken);
 
     List<User> getAllUsers();
 

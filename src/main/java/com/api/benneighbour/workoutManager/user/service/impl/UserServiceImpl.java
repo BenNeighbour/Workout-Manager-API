@@ -1,6 +1,9 @@
 package com.api.benneighbour.workoutManager.user.service.impl;
 
+import com.api.benneighbour.workoutManager.email.ResetPasswordEmailSender;
 import com.api.benneighbour.workoutManager.email.SignupEmailSender;
+import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
+import com.api.benneighbour.workoutManager.email.token.ChangePasswordTokenDao;
 import com.api.benneighbour.workoutManager.exceptions.EmailNotFoundException;
 import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
 import com.api.benneighbour.workoutManager.exceptions.ServiceDownException;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyTakenException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Configurable
@@ -24,10 +28,16 @@ public class UserServiceImpl implements UserService {
     private UserDao dao;
 
     @Autowired
+    private ChangePasswordTokenDao tokenStore;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private SignupEmailSender sender;
+
+    @Autowired
+    private ResetPasswordEmailSender resetSender;
 
     @Override
     public User saveUser(User u) throws EmailAlreadyTakenException, EmailUnreachableException {
@@ -62,17 +72,23 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User resetPassword(User u) throws EmailNotFoundException {
-        if (dao.findUserByEmail(u.getEmail()) == null) {
+    public String resetPassword(String email) throws EmailNotFoundException {
+        // Get user object from the string
+        User user = dao.findUserByEmail(email);
+
+        if (dao.findUserByEmail(email) == null) {
             throw new EmailNotFoundException("Sorry, the email you entered is not linked to any registered accounts.");
         } else {
 
             // Catch anything that could go wrong with setting the new mime message correctly
             try {
+                String token = UUID.randomUUID().toString();
+                this.createVerificationToken(user, token);
+
                 try {
 
                     // Creating a separate thread for the email sending tasks to run on, to avoid slow response time
-                    Thread emailThread = new Thread(sender.newRunnable(u));
+                    Thread emailThread = new Thread(resetSender.newRunnable(user, email));
 
                     // Starting the runnable task on the dedicated email thread
                     emailThread.start();
@@ -84,11 +100,9 @@ public class UserServiceImpl implements UserService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-            // Encode the user's password and save the new one into the database
-            u.setPassword(passwordEncoder.encode(u.getPassword()));
-            return dao.saveAndFlush(u);
         }
+
+        return "";
 
     }
 
@@ -115,6 +129,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByName(String username) {
         return dao.findByUsername(username);
+    }
+
+    @Override
+    public void createVerificationToken(User user, String token) {
+        ChangePasswordToken customToken = new ChangePasswordToken(user, token);
+        tokenStore.save(customToken);
+    }
+
+    @Override
+    public ChangePasswordToken getVerificationToken(String verificationToken) {
+        return tokenStore.findByToken(verificationToken);
     }
 
 }

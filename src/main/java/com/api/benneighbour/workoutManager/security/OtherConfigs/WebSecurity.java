@@ -55,7 +55,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Bean(name = "emailTemplateResolver")
-    protected ITemplateResolver emailTemplateResolver() {
+    public ITemplateResolver emailTemplateResolver() {
         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
         resolver.setPrefix("templates/");
         resolver.setSuffix(".html");
@@ -65,7 +65,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     @Bean(name = "emailTemplateEngine")
-    protected SpringTemplateEngine emailTemplateEngine() {
+    public SpringTemplateEngine emailTemplateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(this.emailTemplateResolver());
 
