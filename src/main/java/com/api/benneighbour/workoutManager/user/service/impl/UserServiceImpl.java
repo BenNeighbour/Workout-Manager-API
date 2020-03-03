@@ -4,9 +4,7 @@ import com.api.benneighbour.workoutManager.email.ResetPasswordEmailSender;
 import com.api.benneighbour.workoutManager.email.SignupEmailSender;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordTokenDao;
-import com.api.benneighbour.workoutManager.exceptions.EmailNotFoundException;
-import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
-import com.api.benneighbour.workoutManager.exceptions.ServiceDownException;
+import com.api.benneighbour.workoutManager.exceptions.*;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import com.api.benneighbour.workoutManager.user.service.UserService;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.UnauthorizedUserException;
 import org.springframework.stereotype.Service;
-import com.api.benneighbour.workoutManager.exceptions.EmailAlreadyTakenException;
 
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String resetPassword(String email) throws EmailNotFoundException {
+    public String resetPassword(String email) throws EmailNotFoundException, EmailVerifySentException {
         // Get user object from the string
         User user = dao.findUserByEmail(email);
 
@@ -82,8 +79,11 @@ public class UserServiceImpl implements UserService {
 
             // Catch anything that could go wrong with setting the new mime message correctly
             try {
+                // Creation of random string representing the token itself
                 String token = UUID.randomUUID().toString();
-                this.createVerificationToken(user, token);
+
+                // TODO: Save the token here
+                
 
                 try {
 
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        return "";
+        throw new EmailVerifySentException("Change password email has been sent!");
 
     }
 
