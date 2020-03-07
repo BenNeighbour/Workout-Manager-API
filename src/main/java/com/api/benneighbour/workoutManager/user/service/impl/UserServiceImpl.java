@@ -82,8 +82,9 @@ public class UserServiceImpl implements UserService {
                 // Creation of random string representing the token itself
                 String token = UUID.randomUUID().toString();
 
-                // TODO: Save the token here
-                
+                // TODO: Call runnable function
+                this.createVerificationToken(user, token);
+
 
                 try {
 
