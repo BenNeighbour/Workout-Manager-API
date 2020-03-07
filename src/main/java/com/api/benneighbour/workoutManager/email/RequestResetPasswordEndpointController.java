@@ -1,26 +1,30 @@
 package com.api.benneighbour.workoutManager.email;
 
 import com.api.benneighbour.workoutManager.exceptions.DuplicateVerificationTokenException;
-import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
 import com.api.benneighbour.workoutManager.exceptions.EmailVerifySentException;
 import com.api.benneighbour.workoutManager.user.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/user/password/")
-public class ResetPasswordEndpointController {
+public class RequestResetPasswordEndpointController {
 
-    @RequestMapping("/change/{email}")
-    public String resetPasswordView(@PathVariable(name = "email") String email, Model model) {
-        model.addAttribute("email", email);
-        return "resetPasswordView";
+    @Autowired
+    private UserServiceImpl service;
+
+
+    @GetMapping("/request/change/{email}")
+    public RuntimeException sendResetEmail(@PathVariable(name = "email") String email) {
+        try {
+            String ex = service.resetPassword(email).getLocalizedMessage();
+            throw new EmailVerifySentException(ex);
+        } catch (DuplicateVerificationTokenException e) {
+            throw new DuplicateVerificationTokenException("duplicate");
+        }
     }
 
 }

@@ -37,6 +37,8 @@ public class ChangePasswordToken implements Serializable  {
         return new Date(calendar.getTime().getTime());
     }
 
+    public ChangePasswordToken() {}
+
     public ChangePasswordToken(User user, String token) {
         this.user = user;
         this.token = token;

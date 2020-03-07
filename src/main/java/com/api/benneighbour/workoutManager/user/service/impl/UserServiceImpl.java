@@ -4,7 +4,6 @@ import com.api.benneighbour.workoutManager.email.ResetPasswordEmailSender;
 import com.api.benneighbour.workoutManager.email.SignupEmailSender;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordTokenDao;
-import com.api.benneighbour.workoutManager.email.token.CreateVerificationToken;
 import com.api.benneighbour.workoutManager.exceptions.*;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;
@@ -33,9 +32,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SignupEmailSender sender;
-
-    @Autowired
-    private CreateVerificationToken createToken;
 
     @Autowired
     private ResetPasswordEmailSender resetSender;
@@ -73,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public String resetPassword(String email) throws EmailNotFoundException, EmailVerifySentException {
+    public RuntimeException resetPassword(String email) throws EmailNotFoundException, EmailVerifySentException, DuplicateVerificationTokenException {
         // Get user object from the string
         User user = dao.findUserByEmail(email);
 
@@ -83,14 +79,17 @@ public class UserServiceImpl implements UserService {
 
             // Catch anything that could go wrong with setting the new mime message correctly
             try {
-                // Creation of random string representing the token itself
-                String token = UUID.randomUUID().toString();
+                try {
 
-                // Creating a separate thread for the token generation to run on, to avoid slow response time
-                Thread createTokenThread = new Thread(createToken.newRunnable(user, token));
+                    // Creation of random string representing the token itself
+                    String token = UUID.randomUUID().toString();
 
-                // Starting the runnable task on the dedicated token thread
-                createTokenThread.start();
+                    this.createVerificationToken(user, token);
+
+
+                } catch (DuplicateVerificationTokenException e) {
+                    throw new DuplicateVerificationTokenException("dup");
+                }
 
                 try {
 
@@ -101,16 +100,15 @@ public class UserServiceImpl implements UserService {
                     emailThread.start();
 
                 } catch (ServiceDownException e) {
-                    e.printStackTrace();
+                    throw new ServiceDownException("service down");
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (DuplicateVerificationTokenException e) {
+                throw new DuplicateVerificationTokenException("duplicate");
             }
         }
-
-        throw new EmailVerifySentException("Change password email has been sent!");
-
+        return new EmailVerifySentException("Email was sent");
+//        throw new DuplicateVerificationTokenException("duplicate");
     }
 
     @Override
@@ -139,9 +137,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createVerificationToken(User user, String token) {
+    public void createVerificationToken(User user, String token) throws DuplicateVerificationTokenException {
         ChangePasswordToken customToken = new ChangePasswordToken(user, token);
-        tokenStore.save(customToken);
+
+        // TODO: Stop duplicates from persisting
+        if (tokenStore.findTokenByUser(user) == null) {
+            tokenStore.save(customToken);
+        } else {
+            throw new DuplicateVerificationTokenException("gh");
+        }
     }
 
     @Override
