@@ -4,6 +4,7 @@ import com.api.benneighbour.workoutManager.email.ResetPasswordEmailSender;
 import com.api.benneighbour.workoutManager.email.SignupEmailSender;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
 import com.api.benneighbour.workoutManager.email.token.ChangePasswordTokenDao;
+import com.api.benneighbour.workoutManager.email.token.CreateVerificationToken;
 import com.api.benneighbour.workoutManager.exceptions.*;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;
@@ -32,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SignupEmailSender sender;
+
+    @Autowired
+    private CreateVerificationToken createToken;
 
     @Autowired
     private ResetPasswordEmailSender resetSender;
@@ -82,9 +86,11 @@ public class UserServiceImpl implements UserService {
                 // Creation of random string representing the token itself
                 String token = UUID.randomUUID().toString();
 
-                // TODO: Call runnable function
-                this.createVerificationToken(user, token);
+                // Creating a separate thread for the token generation to run on, to avoid slow response time
+                Thread createTokenThread = new Thread(createToken.newRunnable(user, token));
 
+                // Starting the runnable task on the dedicated token thread
+                createTokenThread.start();
 
                 try {
 
