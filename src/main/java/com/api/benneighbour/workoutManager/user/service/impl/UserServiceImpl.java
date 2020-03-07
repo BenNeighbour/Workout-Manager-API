@@ -79,13 +79,13 @@ public class UserServiceImpl implements UserService {
 
             // Catch anything that could go wrong with setting the new mime message correctly
             try {
+
+                // Creation of random string representing the token itself
+                UUID token = UUID.randomUUID();
                 try {
 
-                    // Creation of random string representing the token itself
-                    String token = UUID.randomUUID().toString();
-
-                    this.createVerificationToken(user, token);
-
+                    // Generates the token itself
+                    this.createVerificationToken(user, token.toString());
 
                 } catch (DuplicateVerificationTokenException e) {
                     throw new DuplicateVerificationTokenException("dup");
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
                 try {
 
                     // Creating a separate thread for the email sending tasks to run on, to avoid slow response time
-                    Thread emailThread = new Thread(resetSender.newRunnable(user, email));
+                    Thread emailThread = new Thread(resetSender.newRunnable(user, email, token));
 
                     // Starting the runnable task on the dedicated email thread
                     emailThread.start();

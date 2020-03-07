@@ -16,7 +16,6 @@ public class RequestResetPasswordEndpointController {
     @Autowired
     private UserServiceImpl service;
 
-
     @GetMapping("/request/change/{email}")
     public RuntimeException sendResetEmail(@PathVariable(name = "email") String email) {
         try {

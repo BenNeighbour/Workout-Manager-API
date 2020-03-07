@@ -1,5 +1,6 @@
 package com.api.benneighbour.workoutManager.email;
 
+import com.api.benneighbour.workoutManager.email.token.ChangePasswordToken;
 import com.api.benneighbour.workoutManager.exceptions.EmailUnreachableException;
 import com.api.benneighbour.workoutManager.exceptions.ServiceDownException;
 import com.api.benneighbour.workoutManager.user.entity.User;
@@ -12,6 +13,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.UUID;
 
 @Service
 public class ResetPasswordEmailSender {
@@ -29,10 +31,10 @@ public class ResetPasswordEmailSender {
         this.u = u;
     }
 
-    public Runnable newRunnable(User u, String e) {
+    public Runnable newRunnable(User u, String e, UUID t) {
 
         return new Runnable() {
-            private void sendVerificationEmail(User u, String e) throws EmailUnreachableException, ServiceDownException {
+            private void sendVerificationEmail(User u, String e, UUID t) throws EmailUnreachableException, ServiceDownException {
 
                 try {
 
@@ -45,7 +47,7 @@ public class ResetPasswordEmailSender {
                         // Creating a new instance of a context to actually process the email template in the configured directory
                         Context context = new Context();
                         context.setVariable("message", "Hi " + u.getUsername() + ", you are receiving this email to verify that you want to reset your password");
-                        context.setVariable("redirectUrl", "http://localhost:8080/api/v1/user/password/change/" + e);
+                        context.setVariable("redirectUrl", "http://localhost:8080/api/v1/user/password/change/" + e + "/" + t);
 
                         String html = emailTemplateEngine.process("resetPasswordEmail", context);
 
@@ -69,7 +71,7 @@ public class ResetPasswordEmailSender {
 
             @Override
             public void run() {
-                this.sendVerificationEmail(u, e);
+                this.sendVerificationEmail(u, e, t);
             }
         };
     }
