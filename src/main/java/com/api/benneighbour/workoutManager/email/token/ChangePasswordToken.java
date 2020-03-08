@@ -13,7 +13,7 @@ public class ChangePasswordToken implements Serializable  {
 
     private static final long serialVersionUID = 8861214468076063567L;
 
-    private static final int expirationTimeMins = 90;
+    private static final int expirationTimeMins = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

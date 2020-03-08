@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Controller
@@ -21,10 +24,19 @@ public class ResetPasswordEndpointController {
         model.addAttribute("email", email);
         model.addAttribute("token", token);
 
-        if (service.getVerificationToken(token.toString()) != null) {
+        if (service.getVerificationToken(token.toString()).getExpiryDate().after(Calendar.getInstance().getTime())) {
+            throw new RuntimeException("Token is expired");
+
+            // TODO: Retrieve the token's tid
+
+            // TODO: Delete the token
+
+
+        } if (service.getVerificationToken(token.toString()) != null) {
             return "resetPasswordView";
         } else {
-            throw new RuntimeException("Token is expired or invalid");
+
+            throw new RuntimeException("Token is invalid");
         }
     }
 
