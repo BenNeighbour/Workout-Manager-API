@@ -40,11 +40,11 @@ public class ResetPasswordEndpointController {
                 // Delete the token
                 tokenStore.delete(retrievedToken);
 
-                throw new RuntimeException("Token is expired");
+                throw new RuntimeException("Reset Password Token has expired");
             }
 
         } else {
-            throw new RuntimeException("Token is invalid");
+            throw new RuntimeException("Reset Password Token is invalid");
         }
 
         return "resetPasswordView";

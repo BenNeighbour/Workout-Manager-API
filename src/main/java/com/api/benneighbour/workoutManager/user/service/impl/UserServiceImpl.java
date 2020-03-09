@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
                     this.createVerificationToken(user, token.toString());
 
                 } catch (DuplicateVerificationTokenException e) {
-                    throw new DuplicateVerificationTokenException("dup");
+                    throw new DuplicateVerificationTokenException("There is already a valid session to change password for this account");
                 }
 
                 try {
@@ -100,15 +100,14 @@ public class UserServiceImpl implements UserService {
                     emailThread.start();
 
                 } catch (ServiceDownException e) {
-                    throw new ServiceDownException("service down");
+                    throw new ServiceDownException("Internal Server Error");
                 }
 
             } catch (DuplicateVerificationTokenException e) {
-                throw new DuplicateVerificationTokenException("duplicate");
+                throw new DuplicateVerificationTokenException("There is already a valid session to change password for this account");
             }
         }
         return new EmailVerifySentException("Email was sent");
-//        throw new DuplicateVerificationTokenException("duplicate");
     }
 
     @Override
@@ -144,7 +143,7 @@ public class UserServiceImpl implements UserService {
         if (tokenStore.findTokenByUser(user) == null) {
             tokenStore.save(customToken);
         } else {
-            throw new DuplicateVerificationTokenException("gh");
+            throw new DuplicateVerificationTokenException("");
         }
     }
 
