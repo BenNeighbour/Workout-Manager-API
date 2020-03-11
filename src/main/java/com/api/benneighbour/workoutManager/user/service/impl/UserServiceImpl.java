@@ -113,6 +113,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User u) {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
+        u.setAccountEnabled(true);
+
         return dao.saveAndFlush(u);
 
     }
