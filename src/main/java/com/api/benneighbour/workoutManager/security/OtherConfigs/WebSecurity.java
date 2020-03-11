@@ -1,5 +1,6 @@
 package com.api.benneighbour.workoutManager.security.OtherConfigs;
 
+import com.api.benneighbour.workoutManager.email.token.ChangePasswordForm;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -84,6 +85,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public User user() {
         return new User();
+    }
+
+    @Bean
+    public ChangePasswordForm form() {
+        return new ChangePasswordForm();
     }
 
 }
