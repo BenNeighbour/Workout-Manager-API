@@ -96,6 +96,7 @@ public class ValidateResetPasswordForm {
         // Importantly, populating the new User's password with the changed, modified one
         newUser.setPassword(password);
 
+        // Eventually updating the new user into the database
         service.updateUser(newUser);
 
     }
