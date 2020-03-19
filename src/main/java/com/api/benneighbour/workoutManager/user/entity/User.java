@@ -10,6 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -63,6 +65,12 @@ public class User implements Serializable {
     // The collection of workouts that belongs to each user
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Workout.class)
     private List<Workout> workoutList;
+
+    // The themeField for each user that tells React what colour it is tied to
+    @Column(name = "theme")
+    @Min(1)
+    @Max(8)
+    private int themeIndex = 1;
 
     // The enabled boolean for the OAuth 2.0 configuration
     @JsonIgnore
@@ -242,4 +250,11 @@ public class User implements Serializable {
         this.workoutList = workoutList;
     }
 
+
+    public int getThemeIndex() {
+        return themeIndex;
+    }
+    public void setThemeIndex(int themeIndex) {
+        this.themeIndex = themeIndex;
+    }
 }
