@@ -16,6 +16,8 @@ public interface UserService {
 
     User updateUser(User user);
 
+    User updateField(User user);
+
     RuntimeException resetPassword(String email) throws EmailNotFoundException;
 
     void createVerificationToken(User user, String token) throws DuplicateVerificationTokenException;

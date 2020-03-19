@@ -116,7 +116,13 @@ public class UserServiceImpl implements UserService {
         u.setAccountEnabled(true);
 
         return dao.saveAndFlush(u);
+    }
 
+    @Override
+    public User updateField(User u) {
+        u.setAccountEnabled(true);
+
+        return dao.saveAndFlush(u);
     }
 
     @Override
