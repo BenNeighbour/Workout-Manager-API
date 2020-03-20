@@ -1,4 +1,6 @@
-# Workout Manager API Documentation
+<p align="center">
+  <img src="/other/logo.png"  />
+</p>
 
 ## Table of Contents
 
