@@ -69,7 +69,7 @@ public class User implements Serializable {
     // The themeField for each user that tells React what colour it is tied to
     @Column(name = "theme")
     @Min(1)
-    @Max(8)
+    @Max(7)
     private int themeIndex = 1;
 
     // The enabled boolean for the OAuth 2.0 configuration
