@@ -1,5 +1,6 @@
 package com.api.benneighbour.workoutManager.user.entity;
 
+import com.api.benneighbour.workoutManager.completionList.entity.CompletionItem;
 import com.api.benneighbour.workoutManager.user.entity.role.Role;
 import com.api.benneighbour.workoutManager.workout.entity.Workout;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -65,6 +66,11 @@ public class User implements Serializable {
     // The collection of workouts that belongs to each user
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = Workout.class)
     private List<Workout> workoutList;
+
+    // The collection of completion items that belongs to each user
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", targetEntity = CompletionItem.class)
+    private List<CompletionItem> todos;
 
     // The themeField for each user that tells React what colour it is tied to
     @Column(name = "theme")
@@ -251,10 +257,21 @@ public class User implements Serializable {
     }
 
 
+    // The statements for the User todos
+    public List<CompletionItem> getTodos() {
+        return todos;
+    }
+    public void setTodos(List<CompletionItem> todos) {
+        this.todos = todos;
+    }
+
+
+    // The statements for the User theme index id
     public int getThemeIndex() {
         return themeIndex;
     }
     public void setThemeIndex(int themeIndex) {
         this.themeIndex = themeIndex;
     }
+
 }
