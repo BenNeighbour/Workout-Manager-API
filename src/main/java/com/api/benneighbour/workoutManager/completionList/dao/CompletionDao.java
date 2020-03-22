@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompletionDao extends JpaRepository<CompletionItem, Long> {
 
+    CompletionItem findItemByDescription(String description);
 
+    CompletionItem findItemByIid(Long iid);
 
 }

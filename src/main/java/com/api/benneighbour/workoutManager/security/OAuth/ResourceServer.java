@@ -19,7 +19,7 @@ public class ResourceServer extends ResourceServerConfigurerAdapter {
             .antMatchers("/api/v1/user/all/").hasAuthority("ADMIN")
             .antMatchers("/api/v1/user/username/by/**").authenticated()
             .antMatchers("/api/v1/user/update/").authenticated()
-            .antMatchers("/api/v1/user/delete/by/**").hasAuthority("ADMIN")
+            .antMatchers("/api/v1/user/delete/by/**").authenticated()
 
             .antMatchers("/api/v1/workout/update/").authenticated()
             .antMatchers("/api/v1/workout/save/").authenticated()
@@ -30,6 +30,8 @@ public class ResourceServer extends ResourceServerConfigurerAdapter {
             .antMatchers("/api/v1/workout/exercise/delete/by/**").authenticated()
             .antMatchers("/api/v1/workout/exercise/save/").authenticated()
             .antMatchers("/api/v1/workout/exercise/update/").authenticated()
+
+            .antMatchers("/api/v1/user/todos/**").authenticated()
 
             .and()
 
