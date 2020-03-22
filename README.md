@@ -47,6 +47,25 @@ This is a Maven-based project so if you are not using an IDE that can run the co
 
 
 
+## The Database Model
+
+| uid | date_created | email | password | date_updated | username | account_enabled | account_non_expired |
+|-----|--------------|-------|----------|--------------|----------|-----------------|---------------------|
+|544|2020-02-03 18:41:42.314000|john@doe.com|$2a$10$SFmAtZ0...|2020-03-22 10:36:46.656000|JoeBloggs|1|1|
+|545|2020-02-23 17:42:04.780000|joe@bloggs.net|$2a$10$SFmAtZ0...|2020-03-22 10:36:46.656000|JohnDoe99|1|1|
+|546|2020-03-07 18:21:42.078000|ben@neighbour.com|$2a$10$SFmAtZ0...|2020-03-22 10:36:46.656000|ghdfjg|0|1|
+<br />
+
+| account_non_locked | credentials_non_expired | theme |
+|--------------------|-------------------------|-------|
+|1|1|7|
+|0|1|1|
+|0|0|2|
+
+<br />
+
+
+
 [//]: <> (##### API SECTION #####)
 [//]: <> (##### API SECTION #####)
 <div id="api">
