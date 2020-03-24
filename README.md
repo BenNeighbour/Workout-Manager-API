@@ -35,7 +35,7 @@ This project; Workout Manager is my very first End-to-End Fullstack Web Applicat
 
 Through this project, I have also gained skills of working with the fundamentals of Spring MVC and Thymeleaf (a HTML Template Engine). These were used in the 'Change Password' and 'Email' sector of the backend for various reasons which I explain later in another section of this README.
 
-The database I have chosen for this project is MySQL (which again I have been fairly familiar with for the past 6 months). This is because despite the recent development and new use of NoSQL and JSON-based Databases, I am (at this point) using a relational one like Postgres or any of the SQLs. This has worked very nicely so far with the Hibernate ORM and JPA, therefor I do not plan on switching unless the others offer good support for Spring, and a good reason to choose it over my current stack.
+The database I have chosen for this project is MySQL (which again I have been fairly familiar with for the past 6 months). This is because despite the recent development and new use of NoSQL and JSON-based Databases, I am (at this point) using a relational one like Postgres or any of the SQLs. This has worked very nicely so far with the Hibernate ORM and JPA, therefore I do not plan on switching unless the others offer good support for Spring, and a good reason to choose it over my current stack.
 
 [ Back to Table of Contents ](#contents)
 
@@ -111,6 +111,8 @@ Apart from that, the project is ready to be run!
 
 ## The Database Model
 
+### User
+
 | uid | date_created | email | password | date_updated | username | account_enabled | account_non_expired |
 |-----|--------------|-------|----------|--------------|----------|-----------------|---------------------|
 |544|2020-02-03 18:41:42.314000|john@doe.com|$2a$10$SFmAtZ0...|2020-03-22 10:36:46.656000|JoeBloggs|1|1|
@@ -123,6 +125,57 @@ Apart from that, the project is ready to be run!
 |1|1|7|
 |0|1|1|
 |0|0|2|
+
+<br />
+
+### Role
+
+| rid | name |
+|-----|------|
+|1|ADMIN|
+
+<br />
+
+### UserRole
+
+| rid | uid |
+|-----|-----|
+|1|544|
+
+<br />
+
+### Workout
+
+| wid | name | date_created | date_updated | user_uid | description | thumbnail_num |
+|-----|------|--------------|--------------|----------|-------------|---------------|
+|123|Full-Body Monday|2020-02-04 18:47:00.843000|2020-02-09 19:19:18.254000|545|Monday Morning push - hardest workout of the week...|2|
+
+<br />
+
+| eid | burnt_cals | difficulty | duration | name | reps | sets | workout_wid |
+|-----|------------|------------|----------|------|------|------|-------------|
+|160|4354|1|10|Inclined Bench Press|7|3|123|
+
+<br />
+
+### ChangePasswordToken
+
+| tid | expiry_date | token | user_uid |
+|-----|-------------|-------|----------|
+|89|2020-03-22 11:31:01.187000|5e66fb65-9f75-44c1-8849-c17a2c5a3f6b|544|
+|91|2020-03-19 20:33:49.026000|1d563a6b-0325-48f6-993a-7194ee146298|545|
+|92|2020-03-22 10:36:46.656000|eb189927-864c-4da1-8ce6-cd933c928166|546|
+
+<br />
+
+### CompletionItem
+
+| iid | description | is_completed | user_uid | workout_wid | day |
+|-----|-------------|--------------|----------|-------------|-----|
+|6|Get this done!|1|545|123|Thursday|
+|7|Do this at 9:00am tomorrow!|0|544|126|Sunday|
+
+<br />
 
 [ Back to Table of Contents ](#contents)
 
