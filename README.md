@@ -2,13 +2,21 @@
   <img src="/other/logo.png"  />
 </p>
 
+
+
+[//]: <> (##### TABLE OF CONTENTS #####)
+[//]: <> (##### TABLE OF CONTENTS #####)
+
+<div id="contents">
+
 ## Table of Contents
 
 [ About the project ](#about)<br />
 [ Getting Started ](#getting-started)<br />
 [ The Database Model ](#database-model)<br />
-[ API Reference ](#api)<br />
+[ The Biggest Challenges ](#biggest-challenges)<br />
 [ Code Snippets ](#code-snippets)<br />
+[ API Reference ](#api)<br />
 
 <br />
 
@@ -16,6 +24,7 @@
 
 [//]: <> (##### ABOUT SECTION #####)
 [//]: <> (##### ABOUT SECTION #####)
+
 <div id="about">
 
 ## About the project
@@ -27,6 +36,8 @@ This project; Workout Manager is my very first End-to-End Fullstack Web Applicat
 Through this project, I have also gained skills of working with the fundamentals of Spring MVC and Thymeleaf (a HTML Template Engine). These were used in the 'Change Password' and 'Email' sector of the backend for various reasons which I explain later in another section of this README.
 
 The database I have chosen for this project is MySQL (which again I have been fairly familiar with for the past 6 months). This is because despite the recent development and new use of NoSQL and JSON-based Databases, I am (at this point) using a relational one like Postgres or any of the SQLs. This has worked very nicely so far with the Hibernate ORM and JPA, therefor I do not plan on switching unless the others offer good support for Spring, and a good reason to choose it over my current stack.
+
+[ Back to Table of Contents ](#contents)
 
 <br />
 
@@ -43,9 +54,60 @@ In order to get this to work on your machine, you will need to have Java 1.8 or 
 
 This is a Maven-based project so if you are not using an IDE that can run the correct targets for any of the operations that Maven supports, you will need The Maven CLI as well.
 
+If you choose to take a look at the file structure of the Spring Boot project itself, then you will notice that there is a missing file called ```application.properties``` that is meant to be located under the src/main/resources/ directory. Instead, there is a template directory, where all of the HTML email templates and MVC views are located (although you can achieve the same thing with an ```application.yml``` file). I have use the .gitignore file to ignore all of the files in the project with the ```.properties``` suffix; which is for obvious security and protection reasons for myself. This is where all of my Database and SMTP settings are held. The correct directory tree for the ```src/main/resources/``` directory is shown:
+
+```bash
+|-src/
+|--main/
+|---resources/
+|----application.properties
+|----templates/...
+```
+Instead of:
+
+```bash
+|-src/
+|--main/
+|---resources/
+|----templates/...
+```
+
+The ```application.properties``` file itself should look something like this when configured for this sort of project
+
+```properties
+# Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+spring.datasource.url = jdbc:mysql://localhost:YOUR_DATABASE_SERVER_PORT/YOUR_SCHEEMA_NAME
+spring.datasource.username = YOUR_USERNAME
+spring.datasource.password = YOUR_PASWORD
+
+# The SQL dialect makes Hibernate generate better SQL for the chosen database
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL8Dialect
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.show-sql = true
+
+# Hibernate ddl auto (create, create-drop, validate, update)
+spring.jpa.hibernate.ddl-auto = YOUR_CHOSEN_OPTION
+
+# Spring mail sender details
+spring.mail.host = YOUR_SMTP/POP3_PROVIDER
+spring.mail.port = YOUR_CHOSEN_PORT
+spring.mail.username = YOUR_EMAIL_USERNAME
+spring.mail.password = YOUR_EMAIL_PASSWORD
+```
+
+Apart from that, the project is ready to be run!
+
+[ Back to Table of Contents ](#contents)
+
 <br />
 
 
+
+[//]: <> (##### DATABASE MODEL SECTION #####)
+[//]: <> (##### DATABASE MODEL SECTION #####)
+
+<div id="database-model">
 
 ## The Database Model
 
@@ -61,6 +123,8 @@ This is a Maven-based project so if you are not using an IDE that can run the co
 |1|1|7|
 |0|1|1|
 |0|0|2|
+
+[ Back to Table of Contents ](#contents)
 
 <br />
 
@@ -82,5 +146,7 @@ endpoint info
 }
 
 ```
+
+[ Back to Table of Contents ](#contents)
 
 <br />

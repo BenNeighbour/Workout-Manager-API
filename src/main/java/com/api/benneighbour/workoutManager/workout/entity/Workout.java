@@ -1,5 +1,6 @@
 package com.api.benneighbour.workoutManager.workout.entity;
 
+import com.api.benneighbour.workoutManager.completionList.entity.CompletionItem;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import com.api.benneighbour.workoutManager.workout.entity.exercise.Exercise;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,6 +55,11 @@ public class Workout implements Serializable {
     @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = User.class, optional = false)
     @JoinColumn(name ="user_uid", referencedColumnName = "uid")
     private User user;
+
+    // A hidden completion item field that allows multiple different workouts on separate days/todos to the same workout
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = CompletionItem.class)
+    private List<CompletionItem> completionItems;
 
     // The creation timestamp field for each workout
     @JsonIgnore
@@ -167,6 +173,14 @@ public class Workout implements Serializable {
     }
     public void setThumbnail(int thumbnail_num) {
         this.thumbnail_num = thumbnail_num;
+    }
+
+
+    public List<CompletionItem> getCompletionItems() {
+        return completionItems;
+    }
+    public void setCompletionItems(List<CompletionItem> completionItems) {
+        this.completionItems = completionItems;
     }
 
 }
