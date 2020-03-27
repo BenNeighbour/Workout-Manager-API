@@ -14,7 +14,7 @@ import java.util.List;
 public class UserController {
 
     private final String allowedOrigin = "localhost:3000/";
-
+u
     @Autowired
     private UserService userServiceImpl;
 
@@ -44,7 +44,7 @@ public class UserController {
 
         if (u.getPassword() != null) {
             if (!passwordEncoder.matches(u.getPassword(), user1.getPassword())) {
-                throw new RuntimeException("passwords aint the same");
+                throw new RuntimeException("Something went wrong");
             }
 
         }

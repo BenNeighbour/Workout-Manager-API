@@ -98,6 +98,9 @@ public class User implements Serializable {
     @Column(name = "accountNonLocked")
     private Boolean accountNonLocked = true;
 
+    // TODO: New Collection of goals
+
+
     // The creation timestamp field for each workout
     @JsonIgnore
     @CreationTimestamp
