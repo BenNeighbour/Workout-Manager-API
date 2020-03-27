@@ -111,8 +111,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User u) {
-        u.setPassword(passwordEncoder.encode(u.getPassword()));
+    public User updateUser(User u) throws RuntimeException {
+
+        User user1 = dao.findUserByUid(u.getUid());
+
+        // Get user workouts before flushing them when updating
+        u.setWorkouts(user1.getWorkouts());
+
+        // Todos
+        u.setTodos(user1.getTodos());
+
+        // Roles
+        u.setRoles(user1.getRoles());
+
         u.setAccountEnabled(true);
 
         return dao.saveAndFlush(u);

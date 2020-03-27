@@ -1,19 +1,12 @@
 package com.api.benneighbour.workoutManager.user.controller;
 
+import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import com.api.benneighbour.workoutManager.user.service.UserService;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -24,6 +17,12 @@ public class UserController {
 
     @Autowired
     private UserService userServiceImpl;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserDao dao;
 
     @CrossOrigin(origins = allowedOrigin)
     @PostMapping("/signup/")
@@ -37,8 +36,21 @@ public class UserController {
     }
 
     @CrossOrigin(origins = allowedOrigin)
-    @PutMapping("/update")
-    public Object update(@RequestBody User u) {
+    @PutMapping("/update/{password}")
+    public Object update(@RequestBody User u, @PathVariable String password) {
+        u.setPassword(password);
+
+        User user1 = dao.findUserByUid(u.getUid());
+
+        if (u.getPassword() != null) {
+            if (!passwordEncoder.matches(u.getPassword(), user1.getPassword())) {
+                throw new RuntimeException("passwords aint the same");
+            }
+
+        }
+
+        u.setPassword(passwordEncoder.encode(password));
+
         return userServiceImpl.updateUser(u);
     }
 
