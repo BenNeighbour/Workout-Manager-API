@@ -14,7 +14,7 @@ import java.util.List;
 public class UserController {
 
     private final String allowedOrigin = "localhost:3000/";
-u
+
     @Autowired
     private UserService userServiceImpl;
 
