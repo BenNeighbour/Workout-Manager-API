@@ -38,7 +38,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
                 .scopes("read", "write", "trust")
                 .resourceIds("oauth2-resource")
                 .accessTokenValiditySeconds(500)
-                .refreshTokenValiditySeconds(100000)
+                .refreshTokenValiditySeconds(10000)
                 .secret(passwordEncoder.encode("MyStrongPassword"));
     }
 

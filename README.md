@@ -183,6 +183,38 @@ Apart from that, the project is ready to be run!
 
 
 
+[//]: <> (##### BIGGEST CHALLENGES SECTION #####)
+[//]: <> (##### BIGGEST CHALLENGES SECTION #####)
+<div id="biggest-challenges">
+
+## Biggest Challenges
+
+### XSS and Authentication
+
+First of all, out of everything I have researched and learnt about Authtication within Fullstack Web Apps, the decision of where to store tokens is a very difficult one to make the right choice on! Here, I am taking about the frontend, where I am using Redux for state management. This means that all of the objects inside the store are compressed and stored either in a javascript variable, or sessionstorage/localstorage. Because I wanted the store's state to persist between refreshing the page, I chose localstorage. The good sides to using this method are that:
+
+- The objects inside are easy to access via javascript
+- It is convenient to use
+- Authentication on the server-side can be stateless
+
+However, many sources are saying completely different things about localstorage and XSS (Cross Site Scripting). XSS is a massive problem when storing access tokens in somewhere that javascript can read. The reason why I am not using Cookies for Authentication, is that as far as I am aware; Spring OAuth 2.0 only supports stateless authentication with either a Bearer Token or JWT. If I knew this was the case from when I started building this app out, I would have just used standard Spring Security 5 with my own ```authenticate``` method in some kind of auth service. Anyways, I have found that if I make sure my React App is not vulnerable to XSS, then storing information this way would not be much of a problem. This is because the whole point of XSS is to make server-side requests on behalf of another user. 
+
+Yes, you can just use DevTools to just 
+```javascript 
+  console.log(localStorage)
+  -------------------------
+  {
+    ...
+  }
+```
+however, that can only happen if the person themselves decides to do this, (which in the real world, would be rare). Could somebody correct me if I am wrong, but this method is not at all bad compared to using cookies (even httpOnly ones) because they get sent along with every other request (to the domain that it was set by), that is made on behalf of that browser anyway. Yes, the attacker still would not be able to read the value of the token itself, but that value becomes useless when it expires. Also, to make this whole thing a bit harder for a potential attacker, I have set the ```access_token``` validity seconds to ```500```, meaning it would be slightly harder to time it perfectly...
+
+My solution was to just keep a close eye on XSS, by making sure that all the user inputs are sanitized (in which React and Redux-Form do already), and filtering out anything odd on the server side. There are no extra parameters that can be appended on any of the urls on my React App that will manipulate any of the input fields, so that is fine.
+
+<br />
+
+
+
 [//]: <> (##### API SECTION #####)
 [//]: <> (##### API SECTION #####)
 <div id="api">
