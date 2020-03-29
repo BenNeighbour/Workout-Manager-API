@@ -113,9 +113,12 @@ public class Workout implements Serializable {
 
     // The statements for the duration of the Workout
     public int getDuration() {
-        return getExerciseList().stream()
-                .mapToInt(Exercise::getDuration)
-                .sum();
+        if (getExerciseList() != null) {
+            duration = getExerciseList().stream()
+                    .mapToInt(Exercise::getDuration)
+                    .sum();
+        }
+        return duration;
     }
     public void setDuration(int duration) {
         this.duration = duration;

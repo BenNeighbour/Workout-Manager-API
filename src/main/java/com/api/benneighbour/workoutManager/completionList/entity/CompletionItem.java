@@ -25,7 +25,7 @@ public class CompletionItem implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = Workout.class, optional = false)
+    @ManyToOne(cascade = CascadeType.REFRESH, targetEntity = Workout.class, fetch = FetchType.LAZY)
     @JoinColumn(name ="workout_wid", referencedColumnName = "wid")
     private Workout workout;
 
