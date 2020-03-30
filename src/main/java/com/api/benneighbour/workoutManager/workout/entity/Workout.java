@@ -58,8 +58,8 @@ public class Workout implements Serializable {
 
     // A hidden completion item field that allows multiple different workouts on separate days/todos to the same workout
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = CompletionItem.class)
-    private List<CompletionItem> completionItems;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = CompletionItem.class)
+    private CompletionItem completionItems;
 
     // The creation timestamp field for each workout
     @JsonIgnore
@@ -179,10 +179,10 @@ public class Workout implements Serializable {
     }
 
 
-    public List<CompletionItem> getCompletionItems() {
+    public CompletionItem getCompletionItems() {
         return completionItems;
     }
-    public void setCompletionItems(List<CompletionItem> completionItems) {
+    public void setCompletionItems(CompletionItem completionItems) {
         this.completionItems = completionItems;
     }
 

@@ -5,6 +5,8 @@ import com.api.benneighbour.workoutManager.completionList.entity.CompletionItem;
 import com.api.benneighbour.workoutManager.completionList.service.impl.CompletionServiceImpl;
 import com.api.benneighbour.workoutManager.user.dao.UserDao;
 import com.api.benneighbour.workoutManager.user.entity.User;
+import com.api.benneighbour.workoutManager.workout.dao.WorkoutDao;
+import com.api.benneighbour.workoutManager.workout.entity.Workout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,9 @@ public class CompletionController {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private WorkoutDao workoutDao;
 
     @Autowired
     private CompletionDao completionDao;
@@ -67,6 +72,24 @@ public class CompletionController {
         item.setCompletionDay(day);
 
         return service.saveCompletionItem(item);
+    }
+
+    @PostMapping("/{uid}/{username}/{name}/{completed}")
+    public CompletionItem markItemCompleted(@PathVariable("uid") Long uid, @PathVariable("username") String username, @PathVariable("name") String name, @PathVariable("completed") boolean completed) throws RuntimeException {
+        User user1 = userDao.findUserByUid(uid);
+        User user2 = userDao.findByUsername(username);
+
+        if (user1 != user2) {
+            throw new RuntimeException("Something went wrong");
+        }
+
+        Workout w1 = workoutDao.findByName(name);
+
+        CompletionItem item = workoutDao.findItemByWid(w1.getWid()).getCompletionItems();
+        item.setCompleted(completed);
+
+        return service.markCompleted(item);
+
     }
 
     @DeleteMapping("/{uid}/{username}/{iid}/delete")

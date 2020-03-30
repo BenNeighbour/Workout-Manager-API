@@ -35,6 +35,11 @@ public class CompletionServiceImpl implements CompletionService {
     }
 
     @Override
+    public CompletionItem markCompleted(CompletionItem item) {
+        return dao.saveAndFlush(item);
+    }
+
+    @Override
     public void deleteCompletionItem(Long iid) {
         dao.deleteById(iid);
     }

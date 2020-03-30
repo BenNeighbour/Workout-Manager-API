@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WorkoutDao extends JpaRepository<Workout, Long> {
 
+    Workout findByName(String name);
+
+    Workout findItemByWid(Long wid);
+
 }

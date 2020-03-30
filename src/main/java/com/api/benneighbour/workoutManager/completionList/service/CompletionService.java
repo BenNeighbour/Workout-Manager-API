@@ -11,6 +11,8 @@ public interface CompletionService {
 
     List<CompletionItem> getUserCompletionItems(User user);
 
+    CompletionItem markCompleted(CompletionItem item);
+
     void deleteCompletionItem(Long iid);
 
 }

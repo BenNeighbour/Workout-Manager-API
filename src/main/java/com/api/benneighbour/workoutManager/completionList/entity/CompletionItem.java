@@ -18,7 +18,6 @@ public class CompletionItem implements Serializable {
 
     @Id
     @Column(name = "iid")
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long iid;
 
