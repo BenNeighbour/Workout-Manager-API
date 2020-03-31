@@ -124,6 +124,9 @@ public class UserServiceImpl implements UserService {
         // Roles
         u.setRoles(user1.getRoles());
 
+        // Theme
+        u.setThemeIndex(user1.getThemeIndex());
+
         u.setAccountEnabled(true);
 
         return dao.saveAndFlush(u);
