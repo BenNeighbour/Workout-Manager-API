@@ -33,12 +33,12 @@ public class CompletionItem implements Serializable {
     @JoinColumn(name ="user_uid", referencedColumnName = "uid")
     private User user;
 
-    @Column(name = "day")
+    @Column(name = "day", nullable = false)
     @JsonIgnore
     private String completionDay;
 
     @Column(name = "isCompleted")
-    private Boolean isCompleted;
+    private Boolean isCompleted = false;
 
 
     public CompletionItem() {
