@@ -3,6 +3,7 @@ package com.api.benneighbour.workoutManager.workout.entity;
 import com.api.benneighbour.workoutManager.completionList.entity.CompletionItem;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import com.api.benneighbour.workoutManager.workout.entity.exercise.Exercise;
+import com.api.benneighbour.workoutManager.workout.entity.image.ThumbnailImage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,10 +36,6 @@ public class Workout implements Serializable {
     @Column(name = "name")
     private String name;
 
-    // The corresponding thumbnail field for the workout
-    @Column(name = "thumbnail_num")
-    private int thumbnail_num;
-
     // The list of many exercises that are linked to it's class for each workout
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = Exercise.class, cascade = CascadeType.REFRESH, orphanRemoval = true)
     private List<Exercise> exerciseList;
@@ -61,6 +58,9 @@ public class Workout implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = CompletionItem.class, orphanRemoval = true)
     private CompletionItem completionItems;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = ThumbnailImage.class, orphanRemoval = true)
+    private ThumbnailImage image;
+
     // The creation timestamp field for each workout
     @JsonIgnore
     @CreationTimestamp
@@ -77,12 +77,12 @@ public class Workout implements Serializable {
     public Workout() {}
 
     // Constructor with it's values
-    public Workout(Long wid, String name, int thumbnail_num, int duration, List<Exercise> exerciseList, Date created, Date updated) {
+    public Workout(Long wid, String name, int duration, List<Exercise> exerciseList, ThumbnailImage image, Date created, Date updated) {
         this.wid = wid;
         this.name = name;
-        this.thumbnail_num = thumbnail_num;
         this.duration = duration;
         this.exerciseList = exerciseList;
+        this.image = image;
 
         this.created = created;
         this.updated = updated;
@@ -170,20 +170,19 @@ public class Workout implements Serializable {
     }
 
 
-    // The statements for the thumbnail of the Entity
-    public int getThumbnail() {
-        return thumbnail_num;
-    }
-    public void setThumbnail(int thumbnail_num) {
-        this.thumbnail_num = thumbnail_num;
-    }
-
-
     public CompletionItem getCompletionItems() {
         return completionItems;
     }
     public void setCompletionItems(CompletionItem completionItems) {
         this.completionItems = completionItems;
+    }
+
+
+    public ThumbnailImage getImage() {
+        return image;
+    }
+    public void setImage(ThumbnailImage image) {
+        this.image = image;
     }
 
 }
