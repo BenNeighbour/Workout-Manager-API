@@ -80,4 +80,30 @@ public class WorkoutController {
         return encoded;
     }
 
+    @CrossOrigin(origins = allowedOrigin)
+    @PutMapping("/image/update/{wid}")
+    public ResponseEntity<String> update(@RequestParam("image") String image, @PathVariable("wid") Long wid) {
+
+        if (dao.findItemByWid(wid).getImage() != null) {
+            Long workoutImageIid = dao.findItemByWid(wid).getImage().getId();
+            ThumbnailImage updateImage = imageService.getWorkoutImage(workoutImageIid);
+
+            try {
+                byte[] decodedString = Base64.getDecoder().decode((image.substring(image.indexOf(",") + 1)).getBytes("UTF-8"));
+
+                updateImage.setImage(decodedString);
+
+                if (imageService.changeWorkoutImage(updateImage) == null) {
+                    throw new RuntimeException("Image does not exist!");
+                }
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                throw new RuntimeException("This image did not meet the requirements");
+            }
+        } else {
+            throw new RuntimeException("");
+        }
+
+    }
+
 }
