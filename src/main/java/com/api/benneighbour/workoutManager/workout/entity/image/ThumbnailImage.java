@@ -36,7 +36,7 @@ public class ThumbnailImage implements Serializable {
     private byte[] image;
 
     @JsonIgnore
-    @OneToOne(targetEntity = Workout.class)
+    @OneToOne(targetEntity = Workout.class, cascade = CascadeType.PERSIST)
     private Workout workout;
 
     // Required default constructor

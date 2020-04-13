@@ -4,14 +4,20 @@ import com.api.benneighbour.workoutManager.completionList.entity.CompletionItem;
 import com.api.benneighbour.workoutManager.user.entity.User;
 import com.api.benneighbour.workoutManager.workout.entity.exercise.Exercise;
 import com.api.benneighbour.workoutManager.workout.entity.image.ThumbnailImage;
+import com.api.benneighbour.workoutManager.workout.service.image.impl.ImageServiceImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -58,7 +64,7 @@ public class Workout implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = CompletionItem.class, orphanRemoval = true)
     private CompletionItem completionItems;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "workout", targetEntity = ThumbnailImage.class, orphanRemoval = true)
+    @OneToOne(mappedBy = "workout", targetEntity = ThumbnailImage.class, cascade = CascadeType.ALL)
     private ThumbnailImage image;
 
     // The creation timestamp field for each workout
