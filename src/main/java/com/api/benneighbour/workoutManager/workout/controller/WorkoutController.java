@@ -6,21 +6,17 @@ import com.api.benneighbour.workoutManager.workout.entity.Workout;
 import com.api.benneighbour.workoutManager.workout.entity.image.ThumbnailImage;
 import com.api.benneighbour.workoutManager.workout.service.WorkoutService;
 import com.api.benneighbour.workoutManager.workout.service.image.ImageService;
-//import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.Scanner;
 
 @RestController
 @RequestMapping("/api/v1/workout/")
@@ -41,11 +37,27 @@ public class WorkoutController {
     @PostMapping("/save/")
     public Object save(@RequestBody Workout w) {
 
-        // Get the sample.jpeg image and convert it into a multipart file
-        ThumbnailImage image = imageService.getWorkoutImage(new Long(1));
-        ThumbnailImage newImage = new ThumbnailImage(image.getName(), image.getType(), image.getImage(), w);
+        ThumbnailImage defaultImage = new ThumbnailImage();
 
-        w.setImage(newImage);
+        try {
+            File myObj = new File("DefaultWorkoutImage.txt");
+            Scanner myReader = new Scanner(myObj);
+
+            String data = myReader.nextLine();
+            myReader.close();
+
+            byte[] decodedString = Base64.getDecoder().decode(data.getBytes("UTF-8"));
+
+            defaultImage.setImage(decodedString);
+            defaultImage.setName("default");
+            defaultImage.setWorkout(w);
+            defaultImage.setType("image/jpeg");
+
+            w.setImage(defaultImage);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
 
         return service.saveWorkout(w);
     }
@@ -70,12 +82,11 @@ public class WorkoutController {
 
     @CrossOrigin(origins = allowedOrigin)
     @PostMapping("/image/save/{wid}/")
-    public ResponseEntity<String> save(@RequestParam("image") MultipartFile file, @PathVariable("wid") Long wid) {
+    public ResponseEntity<String> save(@RequestParam("image") MultipartFile file, @PathVariable("wid") Long wid) throws RuntimeException {
 
         Workout workout = dao.findItemByWid(wid);
 
         try {
-
             ThumbnailImage image = new ThumbnailImage(file.getOriginalFilename(), file.getContentType(), file.getBytes(), workout);
 
             if (imageService.saveWorkoutImage(image) == null) {
@@ -97,7 +108,7 @@ public class WorkoutController {
 
     @CrossOrigin(origins = allowedOrigin)
     @PutMapping("/image/update/{wid}")
-    public ResponseEntity<String> update(@RequestParam("image") String image, @PathVariable("wid") Long wid) {
+    public ResponseEntity<String> update(@RequestParam("image") String image, @PathVariable("wid") Long wid) throws RuntimeException {
 
         if (dao.findItemByWid(wid).getImage() != null) {
             Long workoutImageIid = dao.findItemByWid(wid).getImage().getId();
@@ -113,6 +124,7 @@ public class WorkoutController {
                 }
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new RuntimeException("This image did not meet the requirements");
             }
         } else {
